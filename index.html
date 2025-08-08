@@ -238,6 +238,36 @@
       .avatar .img{z-index:1; transform:none !important;}
       .avatar .badge{z-index:5; right:12px; bottom:12px; padding:8px 12px; font-size:.92rem}
     }
+  /* === Cinematic FX === */
+    .fx-stars{position:fixed; inset:0; z-index:-4; pointer-events:none; opacity:.55}
+    .fx-aurora{position:fixed; inset:-12% -12% -12% -12%; z-index:-3; pointer-events:none;
+      background:conic-gradient(from 210deg at 70% 40%, rgba(155,92,255,.08), rgba(58,208,255,.06), rgba(255,90,165,.08), rgba(155,92,255,.08));
+      filter:blur(48px) saturate(120%);
+      animation:auroraShift 18s ease-in-out infinite alternate; opacity:.9}
+    .fx-orb{position:fixed; width:44vmax; height:44vmax; border-radius:50%; filter:blur(80px); opacity:.16; pointer-events:none; z-index:-3; mix-blend-mode:screen}
+    .fx-orb.orb1{top:-10vmax; left:-8vmax; background:radial-gradient(circle at 40% 40%, rgba(155,92,255,.55), transparent 60%); animation:orbFloat 24s ease-in-out infinite}
+    .fx-orb.orb2{bottom:-12vmax; right:-10vmax; background:radial-gradient(circle at 60% 40%, rgba(58,208,255,.5), transparent 60%); animation:orbFloat 28s ease-in-out infinite}
+    .fx-orb.orb3{top:60vh; left:50vw; background:radial-gradient(circle at 50% 50%, rgba(255,90,165,.55), transparent 60%); animation:orbFloat 32s ease-in-out infinite}
+
+    .cursor-glow{position:fixed; width:180px; height:180px; border-radius:50%; pointer-events:none; z-index:0; opacity:0;
+      background:radial-gradient(closest-side, rgba(155,92,255,.55), rgba(58,208,255,.35) 40%, rgba(255,90,165,.25) 65%, transparent 70%);
+      filter:blur(18px); mix-blend-mode:screen; transition:opacity .3s ease}
+
+    @keyframes auroraShift{0%{transform:translateY(-2%) rotate(0) scale(1.02)}50%{transform:translateY(3%) rotate(10deg) scale(1.04)}100%{transform:translateY(-1%) rotate(-6deg) scale(1.03)}}
+    @keyframes orbFloat{0%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(2vmax,-1vmax,0) scale(1.06)}100%{transform:translate3d(0,0,0) scale(1)}}
+
+    [data-theme="light"] .fx-aurora{opacity:.6; filter:blur(42px) saturate(110%)}
+    [data-theme="light"] .fx-orb{opacity:.12}
+
+    @media (prefers-reduced-motion:reduce){
+      .fx-aurora,.fx-orb,.fx-stars,.cursor-glow{animation:none; display:none}
+    }
+  /* Mobile stack: image first, text second */
+    @media (max-width:700px){
+      .split{display:flex; flex-direction:column; gap:18px}
+      .split > div:first-child{order:2}
+      .avatar{order:1}
+    }
   </style>
 
   <!-- Structured data (fill with real links later) -->
@@ -254,11 +284,54 @@
       "https://behance.net/your-handle"
     ]
   }
+    // === Cinematic FX (stars + cursor glow) ===
+    function initStars(){
+      if(prefersReduced) return;
+      const c=document.getElementById('stars'); if(!c) return; const ctx=c.getContext('2d');
+      let w=0,h=0,dpr=1,stars=[]; 
+      const rand=(min,max)=>Math.random()*(max-min)+min;
+      function resize(){
+        dpr=Math.min(window.devicePixelRatio||1,1.6);
+        w=window.innerWidth; h=window.innerHeight;
+        c.width=w*dpr; c.height=h*dpr; c.style.width=w+'px'; c.style.height=h+'px';
+        ctx.setTransform(dpr,0,0,dpr,0,0);
+        const count=Math.min(180, Math.floor((w*h)/24000));
+        stars=Array.from({length:count},()=>({x:Math.random()*w, y:Math.random()*h, r:rand(.6,1.6), p:Math.random()*Math.PI*2, s:rand(.5,1.5)}));
+      }
+      window.addEventListener('resize', resize); resize();
+      function tick(ts){
+        ctx.clearRect(0,0,w,h);
+        for(const s of stars){
+          const tw=0.35+0.65*Math.sin(ts/1000*s.s + s.p);
+          ctx.globalAlpha=0.35+0.65*tw;
+          ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fillStyle='#fff'; ctx.fill();
+        }
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+    function initCursorGlow(){
+      if(isTouch || prefersReduced) return;
+      const glow=document.getElementById('cursor-glow'); if(!glow) return;
+      let x=-999, y=-999, raf=null;
+      function onMove(e){ x=e.clientX; y=e.clientY; if(!raf){ raf=requestAnimationFrame(()=>{ glow.style.transform=`translate3d(${x-90}px,${y-90}px,0)`; glow.style.opacity='1'; raf=null; }); } }
+      document.addEventListener('mousemove', onMove, {passive:true});
+      document.addEventListener('mouseleave', ()=>{glow.style.opacity='0'});
+    }
+    initStars();
+    initCursorGlow();
   </script>
 </head>
 <body>
   <div class="mesh" aria-hidden="true"></div>
   <div class="noise" aria-hidden="true"></div>
+  <!-- Cinematic background layers -->
+  <div class="fx-aurora" aria-hidden="true"></div>
+  <div class="fx-orb orb1" aria-hidden="true"></div>
+  <div class="fx-orb orb2" aria-hidden="true"></div>
+  <div class="fx-orb orb3" aria-hidden="true"></div>
+  <canvas id="stars" class="fx-stars" aria-hidden="true"></canvas>
+  <div id="cursor-glow" class="cursor-glow" aria-hidden="true"></div>
   <header>
     <div class="container nav">
       <div class="brand"><span class="brand-dot" aria-hidden="true"></span> uitopstar</div>
@@ -522,7 +595,8 @@
 
     // Magnetic buttons & avatar parallax (reduced for light mode too)
     const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if(!prefersReduced && !('ontouchstart' in window)){
+    const isTouch = 'ontouchstart' in window || (navigator.maxTouchPoints||0) > 0;
+    if(!prefersReduced && !isTouch){
       document.querySelectorAll('.btn').forEach(btn=>{
         btn.addEventListener('mousemove', e=>{
           const r=btn.getBoundingClientRect();
