@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Fateme — UI/UX Designer Portfolio</title>
+  <meta name="description" content="Portfolio of Fateme, a UI/UX designer crafting user‑friendly, visually engaging digital products.">
+  <meta property="og:title" content="Fateme — UI/UX Designer" />
+  <meta property="og:description" content="UI/UX portfolio: case studies, services, process, and contact." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#0b0f1f" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#0a0f1f; --bg2:#0f1430; --card:#121736; --text:#eef2ff; --muted:#a7afd8;
+      --brand-1:#9b5cff; --brand-2:#3ad0ff; --brand-3:#ff5aa5; --ok:#2ad39f; --warn:#ffcc66;
+      --ring:rgba(58,208,255,.35); --glass:rgba(255,255,255,.06);
+      --shadow:0 20px 60px rgba(10,15,31,.45);
+    }
+    [data-theme="light"]{
+      --bg: radial-gradient(1200px 700px at 78% -10%, #ffffff 0%, #f7f9ff 60%),
+             radial-gradient(900px 500px at -10% 110%, #ffffff 0%, #f4f7ff 60%);
+      --bg2:#ffffff; --card:#ffffff; --text:#0b1433; --muted:#4a5272; --glass:rgba(0,0,0,.04);
+      --ring:rgba(155,92,255,.22); --shadow:0 18px 60px rgba(12,18,38,.10);
+      --border:rgba(12,18,38,.12);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    html{scroll-behavior:smooth}
+    body{margin:0; font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif; color:var(--text);
+      background:var(--bg);
+      overflow-x:hidden; position:relative}
+    a{color:inherit; text-decoration:none}
+    :focus-visible{outline:2px solid var(--brand-2); outline-offset:3px; border-radius:6px}
+
+    /* Ensure anchored sections stop below the sticky header */
+    [id]{scroll-margin-top:96px}
+
+    /* Background mesh + noise */
+    .mesh{position:fixed; inset:-20% -20% -20% -20%; z-index:-2; filter:blur(30px); opacity:.5; pointer-events:none;
+      background:radial-gradient(600px 400px at 75% 10%, rgba(155,92,255,.35), transparent 60%),
+                 radial-gradient(600px 400px at 10% 95%, rgba(58,208,255,.25), transparent 60%),
+                 radial-gradient(500px 500px at 20% 20%, rgba(255,90,165,.18), transparent 60%)}
+      
+    .noise{position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.06; mix-blend:overlay;
+      background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity=".6"/></svg>');}
+
+    /* Header */
+    .container{max-width:1220px; margin:0 auto; padding:0 20px}
+    header{position:sticky; top:0; z-index:40; background:linear-gradient(180deg, rgba(12,15,31,.9), rgba(12,15,31,0)); backdrop-filter:saturate(120%) blur(10px)}
+    [data-theme="light"] header{background:linear-gradient(180deg, rgba(255,255,255,.9), rgba(255,255,255,0));}
+    .nav{display:flex; align-items:center; justify-content:space-between; padding:14px 0}
+    .brand{display:flex; align-items:center; gap:10px; font-weight:900; letter-spacing:.3px}
+    .brand-dot{width:12px; height:12px; border-radius:50%; background:conic-gradient(from 120deg, var(--brand-3), var(--brand-1), var(--brand-2), var(--brand-3)); animation:spin 6s linear infinite}
+    .menu{display:flex; align-items:center; gap:22px}
+    .menu a{font-weight:600; color:var(--muted); position:relative; padding:6px 2px}
+    .menu a::after{content:""; position:absolute; left:0; right:0; bottom:-6px; height:2px; transform:scaleX(0); transform-origin:left; background:linear-gradient(90deg, var(--brand-1), var(--brand-2)); transition:transform .25s ease}
+    .menu a:hover,.menu a.active{color:var(--text)}
+    .menu a:hover::after,.menu a.active::after{transform:scaleX(1)}
+    .toggles{display:flex; align-items:center; gap:12px}
+    .chip{padding:8px 12px; border-radius:999px; border:1px solid rgba(255,255,255,.12); color:#cfd3ff}
+    [data-theme="light"] .chip{color:#394069; border-color:rgba(0,0,0,.12)}
+    .theme{cursor:pointer; padding:6px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.14)}
+
+    /* Drawer */
+    .burger{display:none}
+    @media (max-width:860px){ .menu{display:none} .burger{display:flex; align-items:center; gap:10px; cursor:pointer} }
+    .drawer{position:fixed; inset:0 0 0 auto; width:min(78vw,360px); background:var(--bg2); box-shadow:-10px 0 40px rgba(0,0,0,.55); transform:translateX(100%); transition:transform .25s ease; padding:24px; z-index:60}
+    .drawer.open{transform:translateX(0)}
+    .drawer a{display:block; padding:12px 0; border-bottom:1px solid rgba(255,255,255,.06); color:#d2d6f8}
+    [data-theme="light"] .drawer a{color:#2a3157}
+
+    /* Hero */
+    .hero{position:relative; padding:100px 0 40px}
+    .split{display:grid; grid-template-columns:1.15fr .85fr; gap:32px; align-items:center}
+    /* Keep text column above image at all desktop widths */
+    .split > div:first-child{position:relative; z-index:2}
+    .avatar{position:relative; width:min(430px, 92%); margin:0 auto; border-radius:28px; padding:10px; background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.10)}
+    @media (min-width:930px){
+      .split{grid-template-columns:minmax(520px,1.15fr) minmax(380px,.85fr); align-items:start}
+      .avatar{justify-self:end; max-width:460px}
+    }
+    @media (max-width:930px){.split{grid-template-columns:1fr}}
+
+    /* Mobile fine-tuning */
+    @media (max-width:700px){
+      .hero{padding:64px 0 28px}
+      .split{gap:18px}
+      .split > div:first-child{position:relative; z-index:3}
+      .avatar{order:2; position:relative; z-index:1; width:92%; max-width:460px}
+      .avatar .img{position:relative; z-index:1; width:100%; aspect-ratio:1/1; border-radius:20px; background:url('https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=900&auto=format&fit=crop') center/cover no-repeat; border:2px solid rgba(255,255,255,.12); box-shadow:0 20px 80px rgba(155,92,255,.25)}
+      /* reduce motion/overlap on small screens */
+      .title{font-size:clamp(26px,7.2vw,40px)}
+      .lead{font-size:.98rem}
+      .title span{animation:none}
+      .reveal{opacity:1; transform:none}
+    }
+    .kicker{font-weight:700; color:#c9ccff; text-transform:uppercase; letter-spacing:.2em; font-size:.8rem}
+    [data-theme="light"] .kicker{color:#5b60a0}
+    .title{margin:.35em 0 .25em; font-size:clamp(32px, 5vw, 56px); line-height:1.05}
+    .title span{background:linear-gradient(135deg, var(--brand-3), var(--brand-1), var(--brand-2)); -webkit-background-clip:text; background-clip:text; color:transparent; background-size:200% 200%; animation:gradientShift 8s ease infinite}
+    .lead{color:var(--muted); max-width:58ch}
+
+    .cta{display:flex; gap:14px; margin-top:28px; flex-wrap:wrap}
+    .btn{padding:12px 18px; border-radius:999px; font-weight:700; letter-spacing:.2px; position:relative; isolation:isolate; overflow:hidden; transition:transform .2s ease}
+    .btn.primary{background:linear-gradient(90deg, var(--brand-1), var(--brand-2)); box-shadow:0 10px 30px rgba(58,208,255,.25)}
+    .btn.ghost{background:transparent; border:1px solid rgba(255,255,255,.14)}
+    [data-theme="light"] .btn.ghost{border-color:rgba(0,0,0,.12)}
+    .btn::after{content:""; position:absolute; inset:0; background:linear-gradient(120deg, transparent 0%, rgba(255,255,255,.25) 20%, transparent 40%); transform:translateX(-120%); transition:transform .7s ease}
+    .btn:hover::after{transform:translateX(120%)}
+
+    .avatar{position:relative; width:min(430px, 92%); margin:0 auto; transform-style:preserve-3d; isolation:isolate}
+    .avatar .img{width:100%; aspect-ratio:1/1; border-radius:28px; background:url('https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=900&auto=format&fit=crop') center/cover no-repeat; box-shadow:var(--shadow)}
+    .avatar .badge{position:absolute; right:12px; bottom:12px; padding:10px 14px; border-radius:999px; display:inline-flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.2px; z-index:5; 
+      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+      border:1px solid rgba(255,255,255,.16);
+      box-shadow:0 6px 24px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.06) inset;
+      overflow:hidden; /* prevent halo/pulse bleed */
+      transform:translateZ(0); /* new stacking context */
+      transition:transform .2s ease, box-shadow .2s ease;
+    }
+    [data-theme="light"] .avatar .badge{background:rgba(255,255,255,.86); border-color:rgba(0,0,0,.08); box-shadow:0 10px 30px rgba(12,18,38,.12)}
+    .avatar .badge .dot{width:8px; height:8px; border-radius:50%; background:var(--ok); position:relative; box-shadow:0 0 0 2px rgba(42,211,159,.25)}
+    .avatar .badge .dot::after{content:""; position:absolute; inset:0; border-radius:inherit; border:2px solid rgba(42,211,159,.45); animation:ringPulse 2.2s infinite ease-out}
+    .avatar .badge .label{white-space:nowrap}
+    .avatar .badge .arrow{opacity:.9}
+    .avatar .badge:hover{transform:translateY(-1px) scale(1.02); box-shadow:0 14px 40px rgba(58,208,255,.32), 0 0 0 1px rgba(255,255,255,.1) inset}
+    .avatar .badge::before{content:""; position:absolute; top:0; left:-60%; width:50%; height:100%; pointer-events:none; border-radius:inherit; background:linear-gradient(120deg, rgba(255,255,255,.65), rgba(255,255,255,0) 70%); transform:skewX(-20deg) translateX(-100%)}
+    .avatar .badge:hover::before{animation:shineSweep 1.2s ease forwards}
+
+    /* Sections */
+    .section{padding:70px 0}
+    .section h2{font-size:clamp(24px, 3.4vw, 36px)}
+    .muted{color:var(--muted)}
+
+    .about{background:radial-gradient(120% 120% at 20% 10%, rgba(155,92,255,.25), rgba(58,208,255,.15) 40%, var(--glass) 72%), var(--glass); border-radius:28px; padding:28px; box-shadow:var(--shadow), 0 0 0 1px rgba(255,255,255,.06) inset}
+    .services{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:18px}
+    @media (max-width:900px){.services{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:600px){.services{grid-template-columns:1fr}}
+    .svc{background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:18px; transition:transform .25s ease, box-shadow .25s ease}
+    .svc:hover{transform:translateY(-4px); box-shadow:0 18px 50px rgba(0,0,0,.35)}
+
+    .grid{margin-top:18px; display:grid; grid-template-columns:repeat(3,1fr); gap:18px}
+    @media (max-width:900px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:600px){.grid{grid-template-columns:1fr}}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius:18px; overflow:hidden; transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease; will-change:transform}
+    .card:hover{transform:translateY(-6px); box-shadow:0 18px 50px rgba(0,0,0,.35); border-color:rgba(155,92,255,.35)}
+    .thumb{height:170px; background:#141a35 center/cover no-repeat}
+    .card .body{padding:14px}
+    .tags{display:flex; flex-wrap:wrap; gap:8px; margin-top:8px}
+    .tag{font-size:.75rem; color:#b9c0e2; background:rgba(155,92,255,.15); border:1px solid rgba(155,92,255,.25); padding:4px 8px; border-radius:999px}
+
+    .timeline{display:grid; grid-template-columns:1fr; gap:14px; margin-top:18px}
+    .step{display:grid; grid-template-columns:56px 1fr; gap:14px; align-items:start}
+    .dot{width:56px; height:56px; border-radius:16px; background:linear-gradient(135deg, var(--brand-1), var(--brand-2)); display:grid; place-items:center; font-weight:800}
+    .step .box{background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:14px}
+
+    .skills{display:grid; grid-template-columns:repeat(3,1fr); gap:14px}
+    @media (max-width:900px){.skills{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:600px){.skills{grid-template-columns:1fr}}
+    .skill{background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:14px}
+    .bar{height:10px; border-radius:999px; background:rgba(255,255,255,.08); overflow:hidden; margin-top:8px}
+    [data-theme="light"] .bar{background:rgba(0,0,0,.08)}
+    .bar span{display:block; height:100%; background:linear-gradient(90deg, var(--brand-1), var(--brand-2)); width:0}
+
+    .slider{position:relative; overflow:hidden; border-radius:18px; border:1px solid rgba(255,255,255,.08)}
+    .slides{display:flex; transition:transform .6s ease}
+    .tcard{min-width:100%; padding:20px; background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02))}
+    .controls{display:flex; gap:10px; justify-content:flex-end; margin-top:10px}
+    .ctrl{cursor:pointer; padding:8px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.12)}
+
+    form{display:grid; gap:12px; max-width:680px}
+    input, textarea{width:100%; padding:12px 14px; border-radius:12px; border:1px solid rgba(255,255,255,.16); background:rgba(255,255,255,.04); color:var(--text)}
+    [data-theme="light"] input, [data-theme="light"] textarea{background:#fff; border-color:rgba(0,0,0,.12); color:#121221}
+    textarea{min-height:120px}
+
+    .reveal{opacity:0; transform:translateY(24px) scale(.98); filter:saturate(.9); transition:opacity .7s ease, transform .7s ease, filter .7s ease}
+    .reveal.show{opacity:1; transform:none; filter:none}
+
+    footer{padding:40px 0 80px; color:#aeb3d3}
+
+    @keyframes spin{to{transform:rotate(1turn)}}
+    @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+    @media (prefers-reduced-motion:reduce){ .reveal{transition:none} .title span{animation:none} }
+
+    /* ===== Light theme visual enhancements ===== */
+    [data-theme="light"] .mesh{filter:blur(26px); opacity:.45; background:radial-gradient(600px 400px at 75% 10%, rgba(155,92,255,.22), transparent 60%), radial-gradient(600px 400px at 10% 95%, rgba(58,208,255,.18), transparent 60%), radial-gradient(500px 500px at 20% 20%, rgba(255,90,165,.12), transparent 60%)}
+    [data-theme="light"] .noise{opacity:.03; mix-blend:multiply}
+    [data-theme="light"] header{background:linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,0))}
+    [data-theme="light"] .about{background:radial-gradient(120% 120% at 20% 10%, rgba(155,92,255,.12), rgba(58,208,255,.10) 40%, rgba(255,255,255,.8) 72%), #fff; box-shadow:var(--shadow); border:1px solid var(--border)}
+    [data-theme="light"] .svc,[data-theme="light"] .card,[data-theme="light"] .step .box{background:linear-gradient(180deg, rgba(0,0,0,.02), rgba(0,0,0,.01)); border-color:var(--border)}
+    [data-theme="light"] .chip{background:rgba(0,0,0,.04); border-color:var(--border); color:#2a3157}
+    [data-theme="light"] .thumb{background-color:#eaf0ff}
+    [data-theme="light"] .tag{color:#485070; background:rgba(155,92,255,.12); border-color:rgba(155,92,255,.22)}
+    [data-theme="light"] .ctrl{border-color:var(--border)}
+    [data-theme="light"] .drawer{box-shadow:-10px 0 40px rgba(12,18,38,.15)}
+
+    /* Avatar polish & lock */
+    .avatar::before{content:""; position:absolute; inset:-14px; border-radius:36px; background:
+      radial-gradient(360px 240px at 80% 10%, rgba(155,92,255,.25), transparent 60%),
+      radial-gradient(360px 240px at 10% 90%, rgba(58,208,255,.22), transparent 60%);
+      filter:blur(22px); z-index:0; pointer-events:none}
+    .avatar .img::after{content:""; position:absolute; inset:0; border-radius:inherit; box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
+    .avatar.locked, .avatar.locked *:not(.badge):not(.badge *){transform:none !important; transition:none !important; animation:none !important; will-change:auto !important}
+    .avatar.locked .img{pointer-events:none}
+    .avatar.reveal{opacity:1 !important; transform:none !important}
+    [data-theme="light"] .avatar{background:#fff; border-color:var(--border); box-shadow:var(--shadow)}
+    [data-theme="light"] .avatar .img{border-color:var(--border); box-shadow:0 16px 60px rgba(12,18,38,.12)}
+    [data-theme="light"] .avatar::before{opacity:.6}
+
+    /* Services packages grid */
+    .packages{display:grid; grid-template-columns:repeat(3,1fr); gap:18px; margin-top:18px}
+    @media (max-width:900px){ .packages{grid-template-columns:repeat(2,1fr)} }
+    @media (max-width:600px){ .packages{grid-template-columns:1fr} }
+  /* Mobile badge placement & stacking fix */
+    @media (max-width:700px){
+      .avatar{z-index:2}
+      .avatar .img{z-index:1; transform:none !important;}
+      .avatar .badge{z-index:5; right:12px; bottom:12px; padding:8px 12px; font-size:.92rem}
+    }
+  /* Badge animations */
+    @keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-2px)}}
+    @keyframes ringPulse{0%{transform:scale(.6); opacity:.9} 70%{transform:scale(1.6); opacity:0} 100%{opacity:0}}
+    @keyframes shimmer{0%{transform:translateX(-120%)}100%{transform:translateX(120%)}}
+
+    /* Respect reduced motion */
+    @media (prefers-reduced-motion:reduce){
+      .avatar .badge{animation:none}
+      .avatar .badge::before{animation:none}
+      .avatar .badge .dot::after{animation:none}
+    }
+
+    /* Mobile badge placement & stacking fix */
+    @media (max-width:700px){
+      .avatar{z-index:2}
+      .avatar .img{z-index:1; transform:none !important;}
+      .avatar .badge{z-index:5; right:12px; bottom:12px; padding:8px 12px; font-size:.92rem}
+    }
+  </style>
+
+  <!-- Structured data (fill with real links later) -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"Person",
+    "name":"Fateme",
+    "jobTitle":"UI/UX Designer",
+    "url":"https://your-domain.com",
+    "sameAs":[
+      "https://www.linkedin.com/in/your-handle",
+      "https://dribbble.com/your-handle",
+      "https://behance.net/your-handle"
+    ]
+  }
+  </script>
+</head>
+<body>
+  <div class="mesh" aria-hidden="true"></div>
+  <div class="noise" aria-hidden="true"></div>
+  <header>
+    <div class="container nav">
+      <div class="brand"><span class="brand-dot" aria-hidden="true"></span> uitopstar</div>
+      <nav class="menu" aria-label="Primary">
+        <a href="#projects">Projects</a>
+        <a href="#process">Process</a>
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#testimonials">Testimonials</a>
+        <a href="#resume">Resume</a>
+        <a href="#contact" class="chip">Contact</a>
+      </nav>
+      <div class="toggles">
+        <button id="theme" class="theme" aria-label="Toggle theme">🌙</button>
+        <div class="burger" id="burger" aria-label="Menu" aria-expanded="false">
+          <svg width="26" height="18" viewBox="0 0 26 18" fill="none"><path d="M1 1h24M1 9h24M1 17h24" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <aside class="drawer" id="drawer" aria-hidden="true">
+    <a href="#projects" onclick="toggleDrawer(false)">Projects</a>
+    <a href="#process" onclick="toggleDrawer(false)">Process</a>
+    <a href="#about" onclick="toggleDrawer(false)">About</a>
+    <a href="#skills" onclick="toggleDrawer(false)">Skills</a>
+    <a href="#testimonials" onclick="toggleDrawer(false)">Testimonials</a>
+    <a href="#resume" onclick="toggleDrawer(false)">Resume</a>
+    <a href="#contact" onclick="toggleDrawer(false)">Contact</a>
+  </aside>
+
+  <main>
+    <!-- HERO -->
+    <section class="hero container">
+      <div class="split">
+        <div class="reveal" data-delay="0.05s">
+          <div class="kicker">Hello, I am Fateme</div>
+          <h1 class="title">UI/UX <span>Designer</span> — Portfolio</h1>
+          <p class="lead">I craft user‑friendly and visually engaging products. I translate complex problems into accessible, delightful experiences across mobile and web.</p>
+          <div class="cta">
+            <a class="btn primary" href="#projects">View Projects</a>
+            <a class="btn ghost" href="#contact">Get in Touch</a>
+          </div>
+        </div>
+        <div class="avatar reveal locked" data-delay="0.15s">
+          <div class="img" role="img" aria-label="Portrait placeholder"></div>
+          <div class="badge hiring" role="status" aria-live="polite">
+          <span class="dot" aria-hidden="true"></span>
+          <span class="label">Available for work</span>
+          <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section class="section container" id="about">
+      <div class="about reveal">
+        <h2>About me</h2>
+        <p>I am a UI/UX designer with a focus on clarity, inclusivity, and motion. I collaborate end‑to‑end—from research and wireframes to high‑fidelity design systems and interactive prototypes.</p>
+        <div class="services" id="capabilities">
+          <div class="svc"><h3>Product Design</h3><p class="muted">End‑to‑end flows, wireframes, prototyping, and usability testing.</p></div>
+          <div class="svc"><h3>Design Systems</h3><p class="muted">Token‑based systems, component libraries, and documentation.</p></div>
+          <div class="svc"><h3>UX Research</h3><p class="muted">Interviews, surveys, journey mapping, and accessibility audits.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SERVICES (NEW, DETAILED) -->
+    <!-- PROJECTS -->
+    <section class="section container" id="projects">
+      <h2 class="reveal">Selected Projects</h2>
+      <div class="grid">
+        <article class="card reveal">
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=1200&auto=format&fit=crop')"></div>
+          <div class="body">
+            <h3>Neo Wallet — Mobile Banking</h3>
+            <p class="muted">Budgeting‑first banking with micro‑interactions and strong accessibility.</p>
+            <div class="tags"><span class="tag">iOS</span><span class="tag">Design System</span><span class="tag">Prototype</span></div>
+          </div>
+        </article>
+        <article class="card reveal">
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=1200&auto=format&fit=crop')"></div>
+          <div class="body">
+            <h3>Telemedicine Dashboard</h3>
+            <p class="muted">Clinician‑centered workflows with adaptive charts and scheduling.</p>
+            <div class="tags"><span class="tag">Web</span><span class="tag">Research</span><span class="tag">A11y</span></div>
+          </div>
+        </article>
+        <article class="card reveal">
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1200&auto=format&fit=crop')"></div>
+          <div class="body">
+            <h3>Glow Shop — Ecommerce</h3>
+            <p class="muted">High‑conversion storefront with semantic markup and fast checkout.</p>
+            <div class="tags"><span class="tag">Web</span><span class="tag">A/B Test</span><span class="tag">Figma</span></div>
+          </div>
+        </article>
+        <article class="card reveal">
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop')"></div>
+          <div class="body">
+            <h3>Atlas Travel — Booking Experience</h3>
+            <p class="muted">Friction‑less search and booking with progressive disclosure and clear pricing.</p>
+            <div class="tags"><span class="tag">Mobile Web</span><span class="tag">Motion</span><span class="tag">UX Writing</span></div>
+          </div>
+        </article>
+        <article class="card reveal">
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1200&auto=format&fit=crop')"></div>
+          <div class="body">
+            <h3>TaskFlow — Team Collaboration</h3>
+            <p class="muted">Kanban + timelines with keyboard‑first interactions and offline states.</p>
+            <div class="tags"><span class="tag">Web App</span><span class="tag">React</span><span class="tag">Design Tokens</span></div>
+          </div>
+        </article>
+        <article class="card reveal">
+          <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=1200&auto=format&fit=crop')"></div>
+          <div class="body">
+            <h3>Aurora Analytics — SaaS Metrics</h3>
+            <p class="muted">Custom dashboards with accessible color scales and responsive data tables.</p>
+            <div class="tags"><span class="tag">SaaS</span><span class="tag">Data Viz</span><span class="tag">Accessibility</span></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- PROCESS -->
+    <section class="section container" id="process">
+      <h2 class="reveal">Design Process</h2>
+      <div class="timeline">
+        <div class="step reveal"><div class="dot">1</div><div class="box"><strong>Discover</strong><p class="muted">Stakeholder interviews, competitive analysis, and problem framing.</p></div></div>
+        <div class="step reveal"><div class="dot">2</div><div class="box"><strong>Define</strong><p class="muted">Personas, jobs‑to‑be‑done, user journeys, and success metrics.</p></div></div>
+        <div class="step reveal"><div class="dot">3</div><div class="box"><strong>Design</strong><p class="muted">Wireframes, prototypes, and motion—validated with rapid tests.</p></div></div>
+        <div class="step reveal"><div class="dot">4</div><div class="box"><strong>Deliver</strong><p class="muted">Design system tokens, developer handoff, and QA support.</p></div></div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section class="section container" id="skills">
+      <h2 class="reveal">Skills</h2>
+      <div class="skills">
+        <div class="skill reveal"><strong>Figma & Prototyping</strong><div class="bar"><span style="width:90%"></span></div></div>
+        <div class="skill reveal"><strong>Design Systems</strong><div class="bar"><span style="width:85%"></span></div></div>
+        <div class="skill reveal"><strong>User Research</strong><div class="bar"><span style="width:80%"></span></div></div>
+      </div>
+    </section>
+
+    <!-- TESTIMONIALS -->
+    <section class="section container" id="testimonials">
+      <h2 class="reveal">Testimonials</h2>
+      <div class="slider reveal" aria-label="Testimonials">
+        <div class="slides" id="slides">
+          <div class="tcard"><p>“Fateme delivered a clean, accessible interface that our customers love.”</p><p class="muted">— Product Lead, Fintech</p></div>
+          <div class="tcard"><p>“Clear communication and strong craft. The design system saved weeks of dev time.”</p><p class="muted">— Engineering Manager</p></div>
+          <div class="tcard"><p>“Usability test insights were spot on and improved conversion.”</p><p class="muted">— Growth PM</p></div>
+        </div>
+        <div class="controls"><button class="ctrl" id="prev">Prev</button><button class="ctrl" id="next">Next</button></div>
+      </div>
+    </section>
+
+    <!-- RESUME & CONTACT -->
+    <section class="section container" id="resume">
+      <h2 class="reveal">Resume</h2>
+      <p class="lead reveal">Download a concise CV or request the extended portfolio package.</p>
+      <div class="cta reveal">
+        <a class="btn primary" href="#" download>Download PDF</a>
+        <a class="btn ghost" href="#contact">Request Full Portfolio</a>
+      </div>
+    </section>
+
+    <section class="section container" id="contact">
+      <h2 class="reveal">Contact</h2>
+      <p class="muted reveal">Open to freelance and full‑time roles. Send a message and I will reply within 24 hours.</p>
+      <form class="reveal" action="https://formspree.io/f/your-id" method="POST">
+        <input name="name" placeholder="Your name" required />
+        <input type="email" name="email" placeholder="Email address" required />
+        <textarea name="message" placeholder="Tell me about your project" required></textarea>
+        <button class="btn primary" type="submit">Send Message</button>
+      </form>
+      <div class="cta" style="margin-top:18px">
+        <a class="chip" href="#">Behance</a>
+        <a class="chip" href="#">Dribbble</a>
+        <a class="chip" href="#">LinkedIn</a>
+        <a class="chip" href="mailto:hello@example.com">Email</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="container">
+    <div>© <span id="year"></span> Fateme — UI/UX Designer</div>
+  </footer>
+
+  <script>
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Theme toggle
+    const themeBtn = document.getElementById('theme');
+    const saved = localStorage.getItem('theme');
+    const themeMeta = document.querySelector('meta[name="theme-color"]');
+    if(saved){
+      document.documentElement.setAttribute('data-theme', saved);
+      themeBtn.textContent = saved==='light'?'☀️':'🌙';
+      themeMeta?.setAttribute('content', saved==='light' ? '#f7f9ff' : '#0b0f1f');
+    }
+    themeBtn.addEventListener('click', ()=>{
+      const cur = document.documentElement.getAttribute('data-theme');
+      const next = cur==='light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      themeBtn.textContent = next==='light'?'☀️':'🌙';
+      themeMeta?.setAttribute('content', next==='light' ? '#f7f9ff' : '#0b0f1f');
+    });
+
+    // Drawer
+    const drawer=document.getElementById('drawer');
+    const burger=document.getElementById('burger');
+    function toggleDrawer(force){
+      const open = typeof force==='boolean' ? force : !drawer.classList.contains('open');
+      drawer.classList.toggle('open', open);
+      burger?.setAttribute('aria-expanded', String(open));
+      drawer.setAttribute('aria-hidden', String(!open));
+    }
+    burger?.addEventListener('click', ()=>toggleDrawer());
+
+    // Smooth scroll (fallback for old browsers)
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', e=>{
+        const id=a.getAttribute('href');
+        if(id.length>1){ e.preventDefault(); document.querySelector(id)?.scrollIntoView({behavior:'smooth'}); }
+      });
+    });
+
+    // ScrollSpy for nav active link
+    const sections = ['#projects','#process','#about','#skills','#testimonials','#resume','#contact'];
+    const navLinks = Array.from(document.querySelectorAll('.menu a'));
+    const spy = () => {
+      let cur = null; const y = window.scrollY + 120;
+      sections.forEach(s=>{ const el=document.querySelector(s); if(el && el.offsetTop <= y) cur=s; });
+      navLinks.forEach(l=>l.classList.toggle('active', l.getAttribute('href')===cur));
+    };
+    window.addEventListener('scroll', spy); spy();
+
+    // Reveal on scroll
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(el=>{
+        if(el.isIntersecting){ el.target.classList.add('show'); io.unobserve(el.target); }
+      })
+    }, {threshold: 0.12});
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+    // Skill bars animate
+    document.querySelectorAll('.bar span').forEach((b,i)=>{
+      setTimeout(()=>{ const w=b.getAttribute('style').match(/width:([^;]+)/); b.style.width = w? w[1] : (70+i*10)+'%'; }, 300+i*120);
+    });
+
+    // Testimonials slider
+    let idx = 0; const slides = document.getElementById('slides');
+    const go = i=>{ idx=(idx+i+3)%3; slides.style.transform=`translateX(-${idx*100}%)`; };
+    document.getElementById('next').addEventListener('click', ()=>go(1));
+    document.getElementById('prev').addEventListener('click', ()=>go(-1));
+    setInterval(()=>go(1), 6000);
+
+    // Magnetic buttons & avatar parallax (reduced for light mode too)
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(!prefersReduced && !('ontouchstart' in window)){
+      document.querySelectorAll('.btn').forEach(btn=>{
+        btn.addEventListener('mousemove', e=>{
+          const r=btn.getBoundingClientRect();
+          const x=(e.clientX-r.left)/r.width - .5; const y=(e.clientY-r.top)/r.height - .5;
+          btn.style.transform = `translateY(-1px) translate(${x*4}px, ${y*4}px)`;
+        });
+        btn.addEventListener('mouseleave', ()=>{ btn.style.transform=''; });
+      });
+      const avatar = document.querySelector('.avatar .img');
+      document.addEventListener('mousemove', (e)=>{
+        const cx=window.innerWidth/2, cy=window.innerHeight/3;
+        const dx=(e.clientX-cx)/cx, dy=(e.clientY-cy)/cy;
+        if(avatar){ avatar.style.transform = `perspective(700px) rotateY(${dx*6}deg) rotateX(${dy*-4}deg)`; }
+      });
+    }
+  </script>
+</body>
+</html>
