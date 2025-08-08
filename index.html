@@ -74,22 +74,22 @@
 
     /* Hero */
     .hero{position:relative; padding:100px 0 40px}
-    .split{display:grid; grid-template-columns:1.15fr .85fr; gap:32px; align-items:center}
+    .split{display:grid; grid-template-columns:1.15fr .85fr; gap:15px; align-items:center}
     /* Keep text column above image at all desktop widths */
     .split > div:first-child{position:relative; z-index:2}
-    .avatar{position:relative; width:min(430px, 92%); margin:0 auto; border-radius:28px; padding:10px; background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.10)}
+    .avatar{position:relative; width:min(330px, 92%); margin:0 auto; border-radius:28px; padding:10px; background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.10)}
     @media (min-width:930px){
-      .split{grid-template-columns:minmax(520px,1.15fr) minmax(380px,.85fr); align-items:start}
-      .avatar{justify-self:end; max-width:460px}
+      .split{grid-template-columns:minmax(420px,1.15fr) minmax(380px,.85fr); align-items:start}
+      .avatar{justify-self:end; max-width:360px}
     }
     @media (max-width:930px){.split{grid-template-columns:1fr}}
 
     /* Mobile fine-tuning */
-    @media (max-width:700px){
+    @media (max-width:7000px){
       .hero{padding:64px 0 28px}
-      .split{gap:18px}
+      .split{gap:8px}
       .split > div:first-child{position:relative; z-index:3}
-      .avatar{order:2; position:relative; z-index:1; width:92%; max-width:460px}
+      .avatar{order:2; position:relative; z-index:1; width:92%; max-width:260px}
       .avatar .img{position:relative; z-index:1; width:100%; aspect-ratio:1/1; border-radius:20px; background:url('https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=900&auto=format&fit=crop') center/cover no-repeat; border:2px solid rgba(255,255,255,.12); box-shadow:0 20px 80px rgba(155,92,255,.25)}
       /* reduce motion/overlap on small screens */
       .title{font-size:clamp(26px,7.2vw,40px)}
@@ -97,7 +97,7 @@
       .title span{animation:none}
       .reveal{opacity:1; transform:none}
     }
-    .kicker{font-weight:700; color:#c9ccff; text-transform:uppercase; letter-spacing:.2em; font-size:.8rem}
+    .kicker{font-weight:700; color:#c9ccff; text-transform:uppercase; letter-spacing:.2em; font-size:1.2rem}
     [data-theme="light"] .kicker{color:#5b60a0}
     .title{margin:.35em 0 .25em; font-size:clamp(32px, 5vw, 56px); line-height:1.05}
     .title span{background:linear-gradient(135deg, var(--brand-3), var(--brand-1), var(--brand-2)); -webkit-background-clip:text; background-clip:text; color:transparent; background-size:200% 200%; animation:gradientShift 8s ease infinite}
@@ -268,6 +268,75 @@
       .split > div:first-child{order:2}
       .avatar{order:1}
     }
+  /* Filters */
+    .filters{display:flex; flex-wrap:wrap; gap:10px; margin:10px 0 6px}
+    .filters .filter{cursor:pointer}
+
+    /* Before & After */
+    .compare .frame{position:relative; border-radius:18px; overflow:hidden; border:1px solid rgba(255,255,255,.1)}
+    .compare .img{display:block; width:100%; height:auto}
+    .compare .after{position:absolute; inset:0; clip-path:inset(0 calc(100% - var(--clip,50%)) 0 0); transition:clip-path .15s ease}
+    .compare .slider{position:absolute; left:0; right:0; bottom:0; width:100%; -webkit-appearance:none; appearance:none; height:36px; background:linear-gradient(90deg, rgba(255,255,255,.08), rgba(255,255,255,.02)); border-top:1px solid rgba(255,255,255,.12)}
+    .compare .slider::-webkit-slider-thumb{ -webkit-appearance:none; width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg, var(--brand-1), var(--brand-2)); box-shadow:0 6px 20px rgba(0,0,0,.35); border:none}
+    .compare .slider::-moz-range-thumb{ width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg, var(--brand-1), var(--brand-2)); box-shadow:0 6px 20px rgba(0,0,0,.35); border:none}
+
+    /* Scroll progress bar */
+    .scrollbar{position:fixed; top:0; left:0; height:3px; width:100%; transform-origin:left center; transform:scaleX(0); background:linear-gradient(90deg, var(--brand-1), var(--brand-2)); z-index:100}
+
+    /* Theme Lab */
+    .lab-btn{position:fixed; right:16px; bottom:16px; z-index:80; border-radius:999px; padding:10px 14px; font-size:18px; cursor:pointer; border:1px solid rgba(255,255,255,.14); background:linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.06)); box-shadow:0 10px 30px rgba(0,0,0,.35)}
+    .lab{position:fixed; right:16px; bottom:70px; width:280px; border-radius:16px; padding:14px; background:linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.06)); border:1px solid rgba(255,255,255,.14); box-shadow:0 18px 50px rgba(0,0,0,.45); z-index:85; display:none}
+    .lab.open{display:block}
+    .lab h4{margin:0 0 8px 0}
+    .lab .row{display:grid; grid-template-columns:1fr auto; align-items:center; gap:10px; margin:8px 0}
+    .lab input[type="range"]{width:100%}
+    .lab small{color:var(--muted)}
+
+    @media (max-width:700px){ .lab-btn{right:12px; bottom:12px} .lab{right:12px; bottom:64px; width:92vw; max-width:360px} }
+
+    /* === OVERRIDES per request === */
+    /* 1) Avatar: remove bg, border, shadows; show space element instead */
+    .avatar{padding:0 !important; background:transparent !important; border:0 !important; box-shadow:none !important;}
+    .avatar::before{display:none !important;}
+    .avatar .img{display:none !important;}
+    .avatar .badge{display:none !important;} /* remove the Available for work badge */
+
+    .cosmic{width:100%; aspect-ratio:1/1; border-radius:28px; display:block;}
+    .cosmic svg{width:100%; height:100%; display:block;}
+    .cosmic .orbit{fill:none; stroke:rgba(255,255,255,.35); stroke-width:1.2}
+    .cosmic .orbit.accent{stroke:url(#orbitGrad); stroke-width:1.6; opacity:.9}
+    .cosmic .planet{fill:url(#planetGrad)}
+    .cosmic .ringFront{fill:none; stroke:url(#ringGrad); stroke-width:12; opacity:.9}
+    .cosmic .ringBack{fill:none; stroke:url(#ringGrad); stroke-width:12; opacity:.35}
+    .cosmic .moon{fill:url(#moonGrad)}
+    .cosmic .float{animation:floaty 8s ease-in-out infinite}
+    .cosmic .spin-slow{animation:spin 28s linear infinite; transform-origin:50% 50%}
+    .cosmic .spin-fast{animation:spin 16s linear infinite; transform-origin:50% 50%}
+
+    /* 2) Filters: full glass */
+    .filters .filter{
+      padding:8px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.22);
+      background:linear-gradient(180deg, rgba(255,255,255,.16), rgba(255,255,255,.06));
+      -webkit-backdrop-filter: blur(10px) saturate(140%);
+      backdrop-filter: blur(10px) saturate(140%);
+      color:#e9ecff;
+      transition:transform .15s ease, border-color .2s ease, background .2s ease, color .2s ease;
+      box-shadow:none;
+    }
+    .filters .filter:hover{ transform:translateY(-1px); background:linear-gradient(180deg, rgba(255,255,255,.2), rgba(255,255,255,.08)); }
+    .filters .filter.active{ background:linear-gradient(90deg, hsl(275 100% 70% / .85), hsl(195 100% 68% / .85)); color:#0b0f1f; border-color:transparent; }
+    [data-theme="light"] .filters .filter{
+      border-color:rgba(0,0,0,.12);
+      background:linear-gradient(180deg, rgba(255,255,255,.75), rgba(255,255,255,.55));
+      color:#263053;
+    }
+    [data-theme="light"] .filters .filter.active{
+      color:#0b1433;
+      background:linear-gradient(90deg, hsl(275 100% 80% / .85), hsl(195 100% 78% / .85));
+      border-color:transparent;
+    }
   </style>
 
   <!-- Structured data (fill with real links later) -->
@@ -333,6 +402,7 @@
   <canvas id="stars" class="fx-stars" aria-hidden="true"></canvas>
   <div id="cursor-glow" class="cursor-glow" aria-hidden="true"></div>
   <header>
+    <div id="scrollbar" class="scrollbar" aria-hidden="true"></div>
     <div class="container nav">
       <div class="brand"><span class="brand-dot" aria-hidden="true"></span> uitopstar</div>
       <nav class="menu" aria-label="Primary">
@@ -376,12 +446,74 @@
             <a class="btn ghost" href="#contact">Get in Touch</a>
           </div>
         </div>
+        <!-- Avatar replaced by space SVG element, same size/place, no bg/border/shadow -->
         <div class="avatar reveal locked" data-delay="0.15s">
-          <div class="img" role="img" aria-label="Portrait placeholder"></div>
-          <div class="badge hiring" role="status" aria-live="polite">
-          <span class="dot" aria-hidden="true"></span>
-          <span class="label">Available for work</span>
-          <svg class="arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div class="cosmic" aria-label="Brand space motif">
+            <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="true">
+              <defs>
+                <linearGradient id="orbitGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="var(--brand-1)"/>
+                  <stop offset="50%" stop-color="var(--brand-2)"/>
+                  <stop offset="100%" stop-color="var(--brand-3)"/>
+                </linearGradient>
+                <radialGradient id="planetGrad" cx="35%" cy="30%" r="70%">
+                  <stop offset="0%" stop-color="#ffffff" />
+                  <stop offset="55%" stop-color="var(--brand-2)" stop-opacity="0.75"/>
+                  <stop offset="100%" stop-color="var(--brand-1)" stop-opacity="0.95"/>
+                </radialGradient>
+                <radialGradient id="moonGrad" cx="40%" cy="40%" r="70%">
+                  <stop offset="0%" stop-color="#fff"/>
+                  <stop offset="60%" stop-color="var(--brand-3)" stop-opacity="0.8"/>
+                  <stop offset="100%" stop-color="var(--brand-2)" stop-opacity="0.95"/>
+                </radialGradient>
+                <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="var(--brand-2)" stop-opacity=".95"/>
+                  <stop offset="60%" stop-color="var(--brand-1)" stop-opacity=".85"/>
+                  <stop offset="100%" stop-color="var(--brand-3)" stop-opacity=".75"/>
+                </linearGradient>
+                <!-- mask to place ring behind/over planet -->
+                <mask id="planetMask">
+                  <rect width="100%" height="100%" fill="white"/>
+                  <circle cx="220" cy="200" r="78" fill="black"/>
+                </mask>
+                <mask id="planetMaskFront">
+                  <rect width="100%" height="100%" fill="black"/>
+                  <circle cx="220" cy="200" r="78" fill="white"/>
+                </mask>
+              </defs>
+
+              <!-- far thin orbit -->
+              <g class="spin-slow">
+                <ellipse class="orbit" cx="200" cy="210" rx="165" ry="58" transform="rotate(-12 200 210)"/>
+              </g>
+
+              <!-- main system -->
+              <g class="float">
+                <!-- accent orbit -->
+                <g class="spin-fast">
+                  <ellipse class="orbit accent" cx="205" cy="210" rx="120" ry="42" transform="rotate(-16 205 210)"/>
+                  <ellipse class="orbit" cx="200" cy="210" rx="90" ry="30" transform="rotate(10 200 210)" opacity=".6"/>
+                </g>
+
+                <!-- back part of ring (behind planet) -->
+                <g mask="url(#planetMask)">
+                  <ellipse class="ringBack" cx="220" cy="210" rx="140" ry="40" transform="rotate(-16 220 210)"/>
+                </g>
+
+                <!-- planet -->
+                <circle class="planet" cx="220" cy="200" r="78"/>
+
+                <!-- front part of ring (over planet) -->
+                <g mask="url(#planetMaskFront)">
+                  <ellipse class="ringFront" cx="220" cy="210" rx="140" ry="40" transform="rotate(-16 220 210)"/>
+                </g>
+
+                <!-- a moon on orbit -->
+                <g style="transform-origin:200px 210px; animation:spin 12s linear infinite">
+                  <circle class="moon" cx="120" cy="170" r="26"/>
+                </g>
+              </g>
+            </svg>
           </div>
         </div>
       </div>
@@ -400,12 +532,19 @@
       </div>
     </section>
 
-    <!-- SERVICES (NEW, DETAILED) -->
     <!-- PROJECTS -->
     <section class="section container" id="projects">
       <h2 class="reveal">Selected Projects</h2>
+      <div class="filters reveal" role="tablist" aria-label="Filter projects">
+        <button class="chip filter active" data-filter="all" role="tab" aria-selected="true">All</button>
+        <button class="chip filter" data-filter="mobile" role="tab">Mobile</button>
+        <button class="chip filter" data-filter="web" role="tab">Web</button>
+        <button class="chip filter" data-filter="saas" role="tab">SaaS</button>
+        <button class="chip filter" data-filter="a11y" role="tab">A11y</button>
+        <button class="chip filter" data-filter="research" role="tab">Research</button>
+      </div>
       <div class="grid">
-        <article class="card reveal">
+        <article class="card reveal" data-tags="mobile,ios,banking,a11y">
           <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=1200&auto=format&fit=crop')"></div>
           <div class="body">
             <h3>Neo Wallet — Mobile Banking</h3>
@@ -413,7 +552,7 @@
             <div class="tags"><span class="tag">iOS</span><span class="tag">Design System</span><span class="tag">Prototype</span></div>
           </div>
         </article>
-        <article class="card reveal">
+        <article class="card reveal" data-tags="web,health,saas,charts">
           <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1556157382-97eda2d62296?q=80&w=1200&auto=format&fit=crop')"></div>
           <div class="body">
             <h3>Telemedicine Dashboard</h3>
@@ -421,7 +560,7 @@
             <div class="tags"><span class="tag">Web</span><span class="tag">Research</span><span class="tag">A11y</span></div>
           </div>
         </article>
-        <article class="card reveal">
+        <article class="card reveal" data-tags="web,ecommerce,abtest">
           <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1200&auto=format&fit=crop')"></div>
           <div class="body">
             <h3>Glow Shop — Ecommerce</h3>
@@ -429,7 +568,7 @@
             <div class="tags"><span class="tag">Web</span><span class="tag">A/B Test</span><span class="tag">Figma</span></div>
           </div>
         </article>
-        <article class="card reveal">
+        <article class="card reveal" data-tags="mobile,travel,web">
           <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1200&auto=format&fit=crop')"></div>
           <div class="body">
             <h3>Atlas Travel — Booking Experience</h3>
@@ -437,7 +576,7 @@
             <div class="tags"><span class="tag">Mobile Web</span><span class="tag">Motion</span><span class="tag">UX Writing</span></div>
           </div>
         </article>
-        <article class="card reveal">
+        <article class="card reveal" data-tags="web,productivity,react">
           <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1200&auto=format&fit=crop')"></div>
           <div class="body">
             <h3>TaskFlow — Team Collaboration</h3>
@@ -445,7 +584,7 @@
             <div class="tags"><span class="tag">Web App</span><span class="tag">React</span><span class="tag">Design Tokens</span></div>
           </div>
         </article>
-        <article class="card reveal">
+        <article class="card reveal" data-tags="saas,dataviz,a11y">
           <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1542744173-8e7e53415bb0?q=80&w=1200&auto=format&fit=crop')"></div>
           <div class="body">
             <h3>Aurora Analytics — SaaS Metrics</h3>
@@ -453,6 +592,21 @@
             <div class="tags"><span class="tag">SaaS</span><span class="tag">Data Viz</span><span class="tag">Accessibility</span></div>
           </div>
         </article>
+      </div>
+    </section>
+
+    <!-- BEFORE & AFTER COMPARISON (kept original structure) -->
+    <section class="section container" id="before-after">
+      <h2 class="reveal">Before & After</h2>
+      <p class="muted reveal">A quick look at measurable UI improvements.</p>
+      <div class="compare reveal">
+        <div class="frame">
+          <img src="https://images.unsplash.com/photo-1487014679447-9f8336841d58?q=80&w=1400&auto=format&fit=crop" alt="Before redesign" class="img before">
+          <div class="after" style="--clip:50%">
+            <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=1400&auto=format&fit=crop" alt="After redesign" class="img">
+          </div>
+          <input class="slider" type="range" min="0" max="100" value="50" aria-label="Reveal after" />
+        </div>
       </div>
     </section>
 
@@ -516,6 +670,16 @@
         <a class="chip" href="mailto:hello@example.com">Email</a>
       </div>
     </section>
+    <button id="brand-lab-toggle" class="lab-btn" aria-label="Open Theme Lab">🎨</button>
+  <div id="brand-lab" class="lab" aria-hidden="true">
+    <h4>Theme Lab</h4>
+    <div class="row">
+      <label for="hue">Brand Hue</label>
+      <input id="hue" type="range" min="0" max="360" value="285" />
+    </div>
+    <small>Adjusts gradient + accents live</small>
+  </div>
+
   </main>
 
   <footer class="container">
@@ -523,17 +687,21 @@
   </footer>
 
   <script>
+    // Prefs
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isTouch = 'ontouchstart' in window || (navigator.maxTouchPoints||0) > 0;
+
     // Year
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // Theme toggle
     const themeBtn = document.getElementById('theme');
-    const saved = localStorage.getItem('theme');
+    const savedTheme = localStorage.getItem('theme');
     const themeMeta = document.querySelector('meta[name="theme-color"]');
-    if(saved){
-      document.documentElement.setAttribute('data-theme', saved);
-      themeBtn.textContent = saved==='light'?'☀️':'🌙';
-      themeMeta?.setAttribute('content', saved==='light' ? '#f7f9ff' : '#0b0f1f');
+    if(savedTheme){
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      themeBtn.textContent = savedTheme==='light'?'☀️':'🌙';
+      themeMeta?.setAttribute('content', savedTheme==='light' ? '#f7f9ff' : '#0b0f1f');
     }
     themeBtn.addEventListener('click', ()=>{
       const cur = document.documentElement.getAttribute('data-theme');
@@ -542,6 +710,17 @@
       localStorage.setItem('theme', next);
       themeBtn.textContent = next==='light'?'☀️':'🌙';
       themeMeta?.setAttribute('content', next==='light' ? '#f7f9ff' : '#0b0f1f');
+    });
+
+    // A11y toggle (kept, but hidden button not present)
+    const a11yBtn = document.getElementById('a11y');
+    const savedA11y = localStorage.getItem('a11y')==='hc';
+    if(savedA11y){ document.documentElement.setAttribute('data-a11y','hc'); a11yBtn?.setAttribute('aria-pressed','true'); }
+    a11yBtn?.addEventListener('click', ()=>{
+      const on = document.documentElement.getAttribute('data-a11y')==='hc';
+      document.documentElement.setAttribute('data-a11y', on ? '' : 'hc');
+      a11yBtn?.setAttribute('aria-pressed', String(!on));
+      localStorage.setItem('a11y', !on ? 'hc' : '');
     });
 
     // Drawer
@@ -553,18 +732,19 @@
       burger?.setAttribute('aria-expanded', String(open));
       drawer.setAttribute('aria-hidden', String(!open));
     }
+    window.toggleDrawer = toggleDrawer;
     burger?.addEventListener('click', ()=>toggleDrawer());
 
-    // Smooth scroll (fallback for old browsers)
+    // Smooth scroll
     document.querySelectorAll('a[href^="#"]').forEach(a=>{
       a.addEventListener('click', e=>{
         const id=a.getAttribute('href');
-        if(id.length>1){ e.preventDefault(); document.querySelector(id)?.scrollIntoView({behavior:'smooth'}); }
+        if(id && id.length>1){ e.preventDefault(); document.querySelector(id)?.scrollIntoView({behavior:'smooth'}); toggleDrawer(false); }
       });
     });
 
-    // ScrollSpy for nav active link
-    const sections = ['#projects','#process','#about','#skills','#testimonials','#resume','#contact'];
+    // ScrollSpy
+    const sections = ['#projects','#before-after','#process','#about','#skills','#testimonials','#resume','#contact'];
     const navLinks = Array.from(document.querySelectorAll('.menu a'));
     const spy = () => {
       let cur = null; const y = window.scrollY + 120;
@@ -575,15 +755,13 @@
 
     // Reveal on scroll
     const io = new IntersectionObserver((entries)=>{
-      entries.forEach(el=>{
-        if(el.isIntersecting){ el.target.classList.add('show'); io.unobserve(el.target); }
-      })
+      entries.forEach(ent=>{ if(ent.isIntersecting){ ent.target.classList.add('show'); io.unobserve(ent.target); } })
     }, {threshold: 0.12});
     document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
     // Skill bars animate
     document.querySelectorAll('.bar span').forEach((b,i)=>{
-      setTimeout(()=>{ const w=b.getAttribute('style').match(/width:([^;]+)/); b.style.width = w? w[1] : (70+i*10)+'%'; }, 300+i*120);
+      setTimeout(()=>{ const w=b.getAttribute('style')?.match(/width:([^;]+)/); b.style.width = w? w[1] : (70+i*10)+'%'; }, 300+i*120);
     });
 
     // Testimonials slider
@@ -593,9 +771,7 @@
     document.getElementById('prev').addEventListener('click', ()=>go(-1));
     setInterval(()=>go(1), 6000);
 
-    // Magnetic buttons & avatar parallax (reduced for light mode too)
-    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const isTouch = 'ontouchstart' in window || (navigator.maxTouchPoints||0) > 0;
+    // Magnetic buttons & (avatar parallax removed because image removed; guard remains)
     if(!prefersReduced && !isTouch){
       document.querySelectorAll('.btn').forEach(btn=>{
         btn.addEventListener('mousemove', e=>{
@@ -605,13 +781,97 @@
         });
         btn.addEventListener('mouseleave', ()=>{ btn.style.transform=''; });
       });
-      const avatar = document.querySelector('.avatar .img');
+      const avatarImg = document.querySelector('.avatar .img');
       document.addEventListener('mousemove', (e)=>{
         const cx=window.innerWidth/2, cy=window.innerHeight/3;
         const dx=(e.clientX-cx)/cx, dy=(e.clientY-cy)/cy;
-        if(avatar){ avatar.style.transform = `perspective(700px) rotateY(${dx*6}deg) rotateX(${dy*-4}deg)`; }
+        if(avatarImg){ avatarImg.style.transform = `perspective(700px) rotateY(${dx*6}deg) rotateX(${dy*-4}deg)`; }
       });
     }
+
+    // Scroll progress bar
+    const bar=document.getElementById('scrollbar');
+    const setBar=()=>{
+      const sh=document.documentElement.scrollHeight - window.innerHeight;
+      const p=sh>0 ? Math.min(1, window.scrollY/sh) : 0;
+      if(bar) bar.style.transform = `scaleX(${p})`;
+    };
+    window.addEventListener('scroll', setBar); setBar();
+
+    // Project filters
+    const filterButtons=[...document.querySelectorAll('.filter')];
+    const cards=[...document.querySelectorAll('#projects .card')];
+    filterButtons.forEach(btn=>btn.addEventListener('click', ()=>{
+      filterButtons.forEach(b=>{ b.classList.toggle('active', b===btn); b.setAttribute('aria-selected', b===btn ? 'true' : 'false'); });
+      const key=btn.dataset.filter;
+      cards.forEach(c=>{
+        const tags=(c.getAttribute('data-tags')||'').toLowerCase();
+        const show = key==='all' || tags.includes(key);
+        c.style.display = show ? '' : 'none';
+      });
+    }));
+
+    // Before/After slider
+    const cmp=document.querySelector('#before-after .frame');
+    if(cmp){
+      const slider=cmp.querySelector('.slider'); const after=cmp.querySelector('.after');
+      slider.addEventListener('input', ()=>{ after.style.setProperty('--clip', slider.value+'%'); });
+    }
+
+    // Theme Lab (Hue triad)
+    const labBtn=document.getElementById('brand-lab-toggle');
+    const lab=document.getElementById('brand-lab');
+    labBtn?.addEventListener('click', ()=>{
+      const open=!lab.classList.contains('open');
+      lab.classList.toggle('open', open);
+      lab.setAttribute('aria-hidden', String(!open));
+    });
+    const hue=document.getElementById('hue');
+    function setHue(h){
+      const h1=(h)%360, h2=(h+60)%360, h3=(h+300)%360;
+      document.documentElement.style.setProperty('--brand-1', `hsl(${h1} 100% 68%)`);
+      document.documentElement.style.setProperty('--brand-2', `hsl(${h2} 100% 62%)`);
+      document.documentElement.style.setProperty('--brand-3', `hsl(${h3} 100% 66%)`);
+    }
+    hue?.addEventListener('input', ()=>setHue(Number(hue.value)));
+    if(hue) setHue(Number(hue.value));
+
+    // Cinematic FX (stars + cursor glow)
+    function initStars(){
+      if(prefersReduced) return;
+      const c=document.getElementById('stars'); if(!c) return; const ctx=c.getContext('2d');
+      let w=0,h=0,dpr=1,stars=[]; 
+      const rand=(min,max)=>Math.random()*(max-min)+min;
+      function resize(){
+        dpr=Math.min(window.devicePixelRatio||1,1.6);
+        w=window.innerWidth; h=window.innerHeight;
+        c.width=w*dpr; c.height=h*dpr; c.style.width=w+'px'; c.style.height=h+'px';
+        ctx.setTransform(dpr,0,0,dpr,0,0);
+        const count=Math.min(180, Math.floor((w*h)/24000));
+        stars=Array.from({length:count},()=>({x:Math.random()*w, y:Math.random()*h, r:rand(.6,1.6), p:Math.random()*Math.PI*2, s:rand(.5,1.5)}));
+      }
+      window.addEventListener('resize', resize); resize();
+      function tick(ts){
+        ctx.clearRect(0,0,w,h);
+        for(const s of stars){
+          const tw=0.35+0.65*Math.sin(ts/1000*s.s + s.p);
+          ctx.globalAlpha=0.35+0.65*tw;
+          ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fillStyle='#fff'; ctx.fill();
+        }
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    }
+    function initCursorGlow(){
+      if(isTouch || prefersReduced) return;
+      const glow=document.getElementById('cursor-glow'); if(!glow) return;
+      let x=-999, y=-999, raf=null;
+      function onMove(e){ x=e.clientX; y=e.clientY; if(!raf){ raf=requestAnimationFrame(()=>{ glow.style.transform=`translate3d(${x-90}px,${y-90}px,0)`; glow.style.opacity='1'; raf=null; }); } }
+      document.addEventListener('mousemove', onMove, {passive:true});
+      document.addEventListener('mouseleave', ()=>{glow.style.opacity='0'});
+    }
+    initStars();
+    initCursorGlow();
   </script>
 </body>
 </html>
