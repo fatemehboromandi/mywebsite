@@ -337,6 +337,33 @@
       background:linear-gradient(90deg, hsl(275 100% 80% / .85), hsl(195 100% 78% / .85));
       border-color:transparent;
     }
+
+    /* فاصلهٔ امن از لبه‌ها (حتی تو آیفون‌های ناچ‌دار) */
+:root{ --container-pad: clamp(18px, 5vw, 28px); }
+
+.container{
+  padding-inline: var(--container-pad);
+}
+
+/* اگه مرورگر ساپورت کنه، safe-area رو هم لحاظ کن */
+@supports (padding: max(0px)) {
+  .container{
+    padding-left:  max(var(--container-pad), env(safe-area-inset-left));
+    padding-right: max(var(--container-pad), env(safe-area-inset-right));
+  }
+}
+
+/* فاین‌تیون موبایل: متن نفس بکشه و محدود بشه */
+@media (max-width: 700px){
+  .hero{ padding-top: 72px; padding-bottom: 32px; }
+  .split{ gap: 16px; }
+  .split > div:first-child{ 
+    max-width: 36rem;        /* عرض ستون متن محدود */
+    margin-inline: auto;     /* وسط‌چین میشه */
+  }
+  .lead{ max-width: 60ch; }  /* طول خطوط کنترل‌شده */
+}
+
   </style>
 
   <!-- Structured data (fill with real links later) -->
