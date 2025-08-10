@@ -202,8 +202,15 @@
       radial-gradient(360px 240px at 80% 10%, rgba(155,92,255,.25), transparent 60%),
       radial-gradient(360px 240px at 10% 90%, rgba(58,208,255,.22), transparent 60%);
       filter:blur(22px); z-index:0; pointer-events:none}
-    .avatar .img::after{content:""; position:absolute; inset:0; border-radius:inherit; box-shadow:inset 0 0 0 1px rgba(255,255,255,.06)}
-    .avatar.locked, .avatar.locked *:not(.badge):not(.badge *){transform:none !important; transition:none !important; animation:none !important; will-change:auto !important}
+.avatar.locked, 
+.avatar.locked *:not(.badge):not(.badge *):not(.cosmic):not(.cosmic *) { 
+  transform:none !important; 
+  transition:none !important; 
+  animation:none !important; 
+  will-change:auto !important;
+}
+
+
     .avatar.locked .img{pointer-events:none}
     .avatar.reveal{opacity:1 !important; transform:none !important}
     [data-theme="light"] .avatar{background:#fff; border-color:var(--border); box-shadow:var(--shadow)}
