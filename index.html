@@ -719,21 +719,40 @@
     </section>
 
     <section class="section container" id="contact">
-      <h2 class="reveal">Contact</h2>
-      <p class="muted reveal">Open to freelance and full‑time roles. Send a message and I will reply within 24 hours.</p>
-      <form class="reveal" action="https://formspree.io/f/your-id" method="POST">
-        <input name="name" placeholder="Your name" required />
-        <input type="email" name="email" placeholder="Email address" required />
-        <textarea name="message" placeholder="Tell me about your project" required></textarea>
-        <button class="btn primary" type="submit">Send Message</button>
-      </form>
-      <div class="cta" style="margin-top:18px">
-        <a class="chip" href="#">Behance</a>
-        <a class="chip" href="#">Dribbble</a>
-        <a class="chip" href="#">LinkedIn</a>
-        <a class="chip" href="mailto:hello@example.com">Email</a>
-      </div>
-    </section>
+  <h2 class="reveal">Contact</h2>
+  <p class="muted reveal">Open to freelance and full‑time roles. Send a message and I will reply within 24 hours.</p>
+
+  <form id="contact-form" class="reveal" action="https://api.web3forms.com/submit" method="POST">
+    <!-- Web3Forms key -->
+    <input type="hidden" name="access_key" value="76b6dd95-3681-4ad3-96ea-92d66ee30f9a" />
+
+    <!-- Optional: set email subject -->
+    <input type="hidden" name="subject" value="New message from Portfolio Contact Form" />
+
+    <!-- Optional: where to redirect on success (remove if using inline status text) -->
+    <!-- <input type="hidden" name="redirect" value="https://YOUR-USERNAME.github.io/thanks.html" /> -->
+
+    <!-- Honeypot (anti-spam) -->
+    <input type="checkbox" name="botcheck" tabindex="-1" autocomplete="off" style="display:none" />
+
+    <input name="name" placeholder="Your name" required />
+    <input type="email" name="email" placeholder="Email address" required />
+    <textarea name="message" placeholder="Tell me about your project" required></textarea>
+
+    <button class="btn primary" type="submit">Send Message</button>
+
+    <!-- Inline status (English) -->
+    <p id="form-status" class="muted" aria-live="polite" style="margin-top:10px"></p>
+  </form>
+
+  <div class="cta" style="margin-top:18px">
+    <a class="chip" href="#">Behance</a>
+    <a class="chip" href="#">Dribbble</a>
+    <a class="chip" href="#">LinkedIn</a>
+    <a class="chip" href="mailto:hello@example.com">Email</a>
+  </div>
+</section>
+
     <button id="brand-lab-toggle" class="lab-btn" aria-label="Open Theme Lab">🎨</button>
   <div id="brand-lab" class="lab" aria-hidden="true">
     <h4>Theme Lab</h4>
@@ -950,5 +969,41 @@ document.addEventListener('click', (e) => {
     initStars();
     initCursorGlow();
   </script>
+  <script>
+  (function () {
+    const form = document.getElementById('contact-form');
+    if (!form) return;
+    const statusEl = document.getElementById('form-status');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = form.querySelector('button[type="submit"]');
+      submitBtn.disabled = true;
+      statusEl.textContent = 'Sending...';
+
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: new FormData(form)
+        });
+        const json = await res.json();
+
+        if (json.success) {
+          statusEl.textContent = 'Thanks! Your message has been sent successfully.';
+          form.reset();
+        } else {
+          statusEl.textContent = 'Sorry, something went wrong. Please try again.';
+          console.warn(json);
+        }
+      } catch (err) {
+        statusEl.textContent = 'Network error. Please try again in a moment.';
+        console.error(err);
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+  })();
+</script>
+
 </body>
 </html>
