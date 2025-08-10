@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Fateme — UI/UX Designer Portfolio</title>
+  <title>Fatemeh Boromandi</title>
   <meta name="description" content="Portfolio of Fateme, a UI/UX designer crafting user‑friendly, visually engaging digital products.">
   <meta property="og:title" content="Fateme — UI/UX Designer" />
   <meta property="og:description" content="UI/UX portfolio: case studies, services, process, and contact." />
@@ -67,7 +67,22 @@
     /* Drawer */
     .burger{display:none}
     @media (max-width:860px){ .menu{display:none} .burger{display:flex; align-items:center; gap:10px; cursor:pointer} }
-    .drawer{position:fixed; inset:0 0 0 auto; width:min(78vw,360px); background:var(--bg2); box-shadow:-10px 0 40px rgba(0,0,0,.55); transform:translateX(100%); transition:transform .25s ease; padding:24px; z-index:60}
+    
+
+.drawer {
+  position: fixed;
+  inset: 0 0 0 auto;
+  width: min(78vw, 360px);
+  background: rgba(15, 20, 48, 0.75); /* نیمه‌شفاف */
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  backdrop-filter: blur(20px) saturate(140%);
+  transform: translateX(100%);
+  transition: transform .25s ease;
+  padding: 24px;
+  z-index: 60;
+  box-shadow: none; /* اگه نمیخوای سایه باشه */
+  border: none;     /* اگه نمیخوای خط دور باشه */
+}
     .drawer.open{transform:translateX(0)}
     .drawer a{display:block; padding:12px 0; border-bottom:1px solid rgba(255,255,255,.06); color:#d2d6f8}
     [data-theme="light"] .drawer a{color:#2a3157}
@@ -292,7 +307,22 @@
 
     /* Theme Lab */
     .lab-btn{position:fixed; right:16px; bottom:16px; z-index:80; border-radius:999px; padding:10px 14px; font-size:18px; cursor:pointer; border:1px solid rgba(255,255,255,.14); background:linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.06)); box-shadow:0 10px 30px rgba(0,0,0,.35)}
-    .lab{position:fixed; right:16px; bottom:70px; width:280px; border-radius:16px; padding:14px; background:linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.06)); border:1px solid rgba(255,255,255,.14); box-shadow:0 18px 50px rgba(0,0,0,.45); z-index:85; display:none}
+    .lab {
+  position: fixed;
+  right: 16px;
+  bottom: 70px;
+  width: 280px;
+  border-radius: 16px;
+  padding: 14px;
+  background: linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.06));
+  border: 1px solid rgba(255,255,255,.14);
+  box-shadow: 0 18px 50px rgba(0,0,0,.45);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  backdrop-filter: blur(20px) saturate(140%);
+  z-index: 85;
+  display: none;
+}
+
     .lab.open{display:block}
     .lab h4{margin:0 0 8px 0}
     .lab .row{display:grid; grid-template-columns:1fr auto; align-items:center; gap:10px; margin:8px 0}
@@ -438,7 +468,7 @@
   <header>
     <div id="scrollbar" class="scrollbar" aria-hidden="true"></div>
     <div class="container nav">
-      <div class="brand"><span class="brand-dot" aria-hidden="true"></span> uitopstar</div>
+      <div class="brand"><span class="brand-dot" aria-hidden="true"></span> uifamii</div>
       <nav class="menu" aria-label="Primary">
         <a href="#projects">Projects</a>
         <a href="#process">Process</a>
@@ -472,7 +502,7 @@
     <section class="hero container">
       <div class="split">
         <div class="reveal" data-delay="0.05s">
-          <div class="kicker">Hello, I am Fateme</div>
+          <div class="kicker">Hello, I am Fatemeh </div>
           <h1 class="title">UI/UX <span>Designer</span> — Portfolio</h1>
           <p class="lead">I craft user‑friendly and visually engaging products. I translate complex problems into accessible, delightful experiences across mobile and web.</p>
           <div class="cta">
@@ -768,6 +798,19 @@
     }
     window.toggleDrawer = toggleDrawer;
     burger?.addEventListener('click', ()=>toggleDrawer());
+    // بستن منو کشویی وقتی بیرونش کلیک میشه
+document.addEventListener('click', (e) => {
+  const drawerEl = document.getElementById('drawer');
+  const burgerEl = document.getElementById('burger');
+  if (
+    drawerEl.classList.contains('open') && 
+    !drawerEl.contains(e.target) && 
+    !burgerEl.contains(e.target)
+  ) {
+    toggleDrawer(false);
+  }
+});
+
 
     // Smooth scroll
     document.querySelectorAll('a[href^="#"]').forEach(a=>{
